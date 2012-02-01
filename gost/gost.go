@@ -13,9 +13,9 @@ var dict WordDict
 func main() {
 	stack.Init(StackSize)
 	dict.Init()
-	
+
 	setWords()
-	
+
 	var sc TokenScanner
 	for {
 		fmt.Print("GOST>")
@@ -34,7 +34,10 @@ func main() {
 			if err == nil {
 				stack.Push(f)
 			} else {
-				exec(token)
+				fn, ok := dict.Search(token)
+				if ok {
+					fn()
+				}
 			}
 		}
 
@@ -54,7 +57,7 @@ func pop() (f float32, err string) {
 	case float64:
 		f = float32(i)
 	default:
-		err = "stack pop unknowm"
+		err = "stack pop type unknowm"
 	}
 	return
 }
@@ -77,7 +80,8 @@ func setWords() {
 			fmt.Println(err)
 		}
 	}
-	dict.SetWord( ".", &fn)
+	dict.SetWord(".", fn)
+
 	fn = func() {
 		n1, err := pop()
 		if err != "" {
@@ -90,9 +94,10 @@ func setWords() {
 			return
 		}
 		push(n2 + n1)
-	} 
-	dict.SetWord(  "+", &fn) 
-	fn = func (){
+	}
+	dict.SetWord("+", fn)
+
+	fn = func() {
 		n1, err := pop()
 		if err != "" {
 			fmt.Println(err)
@@ -104,8 +109,9 @@ func setWords() {
 			return
 		}
 		push(n2 - n1)
-	} 
-	dict.SetWord(  "-" , &fn)
+	}
+	dict.SetWord("-", fn)
+
 	fn = func() {
 		n1, err := pop()
 		if err != "" {
@@ -119,7 +125,8 @@ func setWords() {
 		}
 		push(n2 * n1)
 	}
-	dict.SetWord(  "*" , &fn)
+	dict.SetWord("*", fn)
+
 	fn = func() {
 		n1, err := pop()
 		if err != "" {
@@ -134,67 +141,7 @@ func setWords() {
 		push(n2 / n1)
 		return
 	}
-	dict.SetWord(  "/", &fn)	
-}
-
-
-func exec(token string) {
-	if token == "." {
-		n, err := pop()
-		if err == "" {
-			fmt.Println(n)
-		} else {
-			fmt.Println(err)
-		}
-	} else if token == "+" {
-		n1, err := pop()
-		if err != "" {
-			fmt.Println(err)
-			return
-		}
-		n2, err := pop()
-		if err != "" {
-			fmt.Println(err)
-			return
-		}
-		push(n2 + n1)
-	} else if token == "-" {
-		n1, err := pop()
-		if err != "" {
-			fmt.Println(err)
-			return
-		}
-		n2, err := pop()
-		if err != "" {
-			fmt.Println(err)
-			return
-		}
-		push(n2 - n1)
-	} else if token == "*" {
-		n1, err := pop()
-		if err != "" {
-			fmt.Println(err)
-			return
-		}
-		n2, err := pop()
-		if err != "" {
-			fmt.Println(err)
-			return
-		}
-		push(n2 * n1)
-	} else if token == "/" {
-		n1, err := pop()
-		if err != "" {
-			fmt.Println(err)
-			return
-		}
-		n2, err := pop()
-		if err != "" {
-			fmt.Println(err)
-			return
-		}
-		push(n2 / n1)
-	}
+	dict.SetWord("/", fn)
 }
 
 func readln() []byte {

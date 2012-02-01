@@ -1,6 +1,5 @@
 package main
 
-
 type StackElement struct {
 	element interface{}
 }
@@ -21,6 +20,7 @@ func (s *Stack) Init(size int) {
 
 func (s *Stack) Push(elem interface{}) int {
 	if s.stackPointer >= s.stackMax {
+		// stack over
 		return -1
 	}
 	s.stack[s.stackPointer].element = elem
@@ -30,9 +30,9 @@ func (s *Stack) Push(elem interface{}) int {
 
 func (s *Stack) Pop() interface{} {
 	if s.stackPointer <= 0 {
+		// stack under
 		return nil
 	}
 	s.stackPointer--
 	return s.stack[s.stackPointer].element
 }
-
