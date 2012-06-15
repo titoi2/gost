@@ -9,6 +9,7 @@ How to use
 ----------
 
 ビルド方法
+
 go build gost.go stack.go scan.go dict.go
 
 ./gost で起動します。
