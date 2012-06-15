@@ -30,7 +30,7 @@ func main() {
 				break
 			}
 
-			f, err := strconv.Atof32(token)
+			f, err := strconv.ParseFloat(token, 64)
 			if err == nil {
 				stack.Push(f)
 			} else {
