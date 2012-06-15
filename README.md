@@ -8,7 +8,8 @@ Go言語で書かれたサンプルプログラムのスタック計算機です
 How to use
 ----------
 
-make コマンドでビルド出来ます。
+ビルド方法
+go build gost.go stack.go scan.go dict.go
 
 ./gost で起動します。
 
